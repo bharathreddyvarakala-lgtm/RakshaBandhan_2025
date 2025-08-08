@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For You</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Dancing Script", cursive;
+        background: black;
+        color: white;
+        overflow-x: hidden;
+      }
+
+      canvas#starfield {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+
+      #heart-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .center {
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      button {
+        font-size: 1.5rem;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        background: pink;
+        cursor: pointer;
+      }
+
+      #letter {
+        display: none;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 600px;
+        border-radius: 15px;
+      }
+
+      #slideshow img {
+        max-height: 350px;
+        height: auto;
+        display: block;
+        margin: auto;
+      }
+
+      .rakhi-title {
+        text-align: center;
+        font-family: "Dancing Script", cursive;
+        font-size: 50px;
+        color: #ff4fa3;
+        margin-top: 20px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      img {
+        border-radius: 15px; /* Soft edges */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation */
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1 class="rakhi-title">Happy Raksha Bandhan Cutusssss 💗</h1>
+
+    <canvas id="starfield"></canvas>
+    <div id="heart-container"></div>
+
+    <div class="center">
+      <button id="forYouBtn">
+        A special message for YOU guys - CLICK!!! ❤️
+      </button>
+    </div>
+
+    <div id="letter" class="center">
+      <p
+        style="
+          margin-left: 20px;
+          margin-right: 20px;
+          text-align: center;
+          font-family: Candara, sans-serif;
+        "
+      >
+        Hope we are together forever like this, and uk, even after u both get
+        married (seperately offc), and have kids, I wanna be their "COOL MAMA",
+        and alsooo!!!! Ik im not that good, and always disappoint and hurt u
+        both, in a lot of ways, since a long time... I just hope, I can stop
+        doing all those, now that ik this new "Guards Technique", and I just
+        wanna let u both know... Im so so grateful for having u both in my
+        life... Hope, we always stay together, "closee gaa", and that u both
+        will never ever leave me... I just dont wanna ever annoy u, and hope u
+        both always consider me as ur own brother, cuz naaku mee iddharu own
+        sisters laaga ne!!! We 3 are actually siblings according to me... Hope u
+        never leave me (malli chepthunna), and I am someone important for u
+        both, and u both come and talk to me, share me stuff, and I will too
+        offc!!! Hope we get to spend lots and lots of time together... THANK
+        YOUU FOR ALWAYS BEARING WITH ME!!! ✨
+      </p>
+    </div>
+
+    <div id="slideshow" class="center">
+      <img id="slideshowImage" src="insert here" alt="Slideshow" />
+      <div style="margin-top: 10px">
+        <button id="prev">Prev</button>
+        <button id="next">Next</button>
+      </div>
+    </div>
+
+    <script>
+      // Starry background
+      const canvas = document.getElementById("starfield");
+      const ctx = canvas.getContext("2d");
+      let stars = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      for (let i = 0; i < 200; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 2,
+        });
+      }
+
+      function drawStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        for (let s of stars) {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+          s.y += 0.2;
+          if (s.y > canvas.height) s.y = 0;
+        }
+        requestAnimationFrame(drawStars);
+      }
+      drawStars();
+
+      // Heart trail
+      const heartContainer = document.getElementById("heart-container");
+
+      function createHeart(x, y) {
+        const heart = document.createElement("div");
+        heart.textContent = "💖";
+        heart.style.position = "absolute";
+        heart.style.left = `${x}px`;
+        heart.style.top = `${y}px`;
+        heart.style.fontSize = "15px";
+        heart.style.animation = "floatUp 3s ease-out forwards";
+        heartContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 3000);
+      }
+
+      window.addEventListener("mousemove", (e) =>
+        createHeart(e.clientX, e.clientY)
+      );
+
+      window.addEventListener("touchmove", (e) => {
+        for (let t of e.touches) createHeart(t.clientX, t.clientY);
+      });
+
+      const style = document.createElement("style");
+      style.textContent = `
+        @keyframes floatUp {
+          0% { transform: translateY(0); opacity: 1; }
+          100% { transform: translateY(-50px); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Show letter — toggle and change button text (no alert)
+      const forYouBtn = document.getElementById("forYouBtn");
+      const letter = document.getElementById("letter");
+      const originalBtnText = forYouBtn.textContent;
+
+      forYouBtn.addEventListener("click", () => {
+        const isOpen = letter.style.display === "block";
+
+        if (!isOpen) {
+          letter.style.display = "block";
+          forYouBtn.textContent = "Now close and go check out the pics 🔪";
+          letter.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+          letter.style.display = "none";
+          forYouBtn.textContent = originalBtnText;
+        }
+      });
+
+      // Slideshow
+      const images = [
+        "https://uploads.onecompiler.io/433uc5e3b/43t4kg329/WhatsApp%20Image%202025-08-08%20at%2021.16.31_6b843e07.jpg",
+        "https://uploads.onecompiler.io/433uc5e3b/43t4kg329/WhatsApp%20Image%202025-08-08%20at%2021.16.32_69c487d7.jpg",
+        "https://uploads.onecompiler.io/433uc5e3b/43t4kg329/WhatsApp%20Image%202025-08-08%20at%2021.16.32_ecb18d6d.jpg",
+        "https://uploads.onecompiler.io/433uc5e3b/43t4kg329/2.jpg",
+        "https://uploads.onecompiler.io/433uc5e3b/43t4kg329/1.jpg",
+      ];
+
+      let currentIndex = 0;
+      const slideshowImage = document.getElementById("slideshowImage");
+
+      function showImage(index) {
+        slideshowImage.src = images[index];
+      }
+      showImage(currentIndex);
+
+      document.getElementById("next").addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+      });
+
+      document.getElementById("prev").addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(currentIndex);
+      });
+    </script>
+
+    <div
+      style="
+        text-align: center;
+        margin-top: 40px;
+        font-size: 20px;
+        color: #ffb6c1;
+        font-family: 'Dancing Script', cursive;
+      "
+    >
+      With love, from your brotherrr Bharath! 💕
+    </div>
+  </body>
+</html>
